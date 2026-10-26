@@ -22,7 +22,7 @@ In [entra.microsoft.com](https://entra.microsoft.com) → App registrations → 
 |---|---|
 | Supported account types | **Personal Microsoft accounts only**. The app is built and tested for personal (outlook.com, hotmail, Gmail-based) accounts. Work and school accounts use a different authority and are untested. |
 | Platform | **Single-page application (SPA)**. Don't use "Web", and don't add a client secret: a browser app can't keep one. |
-| Redirect URIs | `http://localhost:5173` (development), `https://notes-web-app.<your-subdomain>.workers.dev`, and your custom domain if you add one, e.g. `https://notes.example.com`. They must match exactly: no trailing slash, and HTTPS in production. |
+| Redirect URIs | `http://localhost:5173` (development), `https://notes.naphats.me` (the custom domain), and `https://notes-web-app.<your-subdomain>.workers.dev` while that address stays on. They must match exactly: no trailing slash, and HTTPS in production. |
 | Implicit grant | **Off**. MSAL uses the authorization-code flow with PKCE. |
 | API permissions | Microsoft Graph, delegated: **Mail.ReadWrite**. You can remove `User.Read`, since the app no longer requests it. `openid`, `profile` and `offline_access` are added automatically at sign-in. |
 | Branding | Name "Notes", the logo from `public/icon-512.png`, home page URL, **Terms of service URL** `https://<domain>/terms`, **Privacy statement URL** `https://<domain>/privacy`. Microsoft shows these on the consent screen. Cloudflare serves the pages at these clean URLs; the `.html` addresses redirect to them. |
@@ -34,7 +34,7 @@ The client ID is **not a secret**: it's public in every SPA. It goes in `VITE_EN
 
 ## 2. Cloudflare
 
-**Live:** https://notes-web-app.naphats.workers.dev. It deploys from `main` on github.com/plykung/notes-web-app through Workers Builds. Logs, traces and issue detection are on (`observability` in [wrangler.jsonc](../wrangler.jsonc), kept in step with the dashboard so a deploy doesn't undo them).
+**Live:** https://notes.naphats.me (also served at https://notes-web-app.naphats.workers.dev). It deploys from `main` on github.com/plykung/notes-web-app through Workers Builds. Logs, traces and issue detection are on (`observability` in [wrangler.jsonc](../wrangler.jsonc), kept in step with the dashboard so a deploy doesn't undo them).
 
 ### One-time setup (Workers Builds, recommended)
 

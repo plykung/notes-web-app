@@ -5,6 +5,10 @@
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "notes-web-app",
   "compatibility_date": "2026-10-26",
+  // The public address, set here as well as in the dashboard so a deploy can't
+  // drop it. The workers.dev address stays on until users have moved over.
+  "routes": [{ "pattern": "notes.naphats.me", "custom_domain": true }],
+  "workers_dev": true,
   "assets": {
     // `npm run build` output. Security and cache headers: public/_headers.
     "directory": "./dist"

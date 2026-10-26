@@ -2,7 +2,7 @@
 
 **Notes** puts your notes on every device: PC, iPad and phone. An offline-first PWA that works with Microsoft Sticky Notes, through Microsoft Graph, straight from the browser, with no server in between.
 
-**Live:** https://notes-web-app.naphats.workers.dev
+**Live:** https://notes.naphats.me
 
 - Search and Tags (`#word`), colours, pinning, images
 - Works offline; changes sync when you're back online, with a compare screen for conflicts

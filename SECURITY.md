@@ -4,7 +4,7 @@ Notes asks for access to the user's Microsoft mailbox (`Mail.ReadWrite`), so sec
 
 ## Supported versions
 
-Only the current `main` branch, which is what's deployed at https://notes-web-app.naphats.workers.dev, gets security fixes.
+Only the current `main` branch, which is what's deployed at https://notes.naphats.me, gets security fixes.
 
 ## Reporting a vulnerability
 
