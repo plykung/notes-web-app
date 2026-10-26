@@ -1,0 +1,12 @@
+// Cloudflare Workers, static assets only: the app has no server code. Notes go
+// straight from each user's browser to Microsoft Graph, so there is nothing to
+// scale here beyond Cloudflare's own edge (docs/deploy.md).
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "notes-web-app",
+  "compatibility_date": "2026-10-26",
+  "assets": {
+    // `npm run build` output. Security and cache headers: public/_headers.
+    "directory": "./dist"
+  }
+}

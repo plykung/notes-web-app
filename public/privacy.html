@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'" />
+    <title>นโยบายความเป็นส่วนตัว</title>
+    <link rel="icon" href="/icon-192.png" />
+    <link rel="stylesheet" href="/legal.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header>
+        <a class="back" href="/">← Notes</a>
+        <span class="spacer"></span>
+        <div class="lang" role="group" aria-label="ภาษา / Language">
+          <button data-lang="th">ไทย</button>
+          <button data-lang="en">English</button>
+        </div>
+      </header>
+
+      <article data-lang-block="th">
+        <h1>นโยบายความเป็นส่วนตัว</h1>
+        <p class="meta">มีผลตั้งแต่วันที่ 26 ตุลาคม 2569</p>
+
+        <p>นโยบายนี้อธิบายว่าแอป <strong>Notes</strong> (“แอป”) จัดการข้อมูลของคุณอย่างไร แอปนี้พัฒนาและดูแลโดยบุคคลธรรมดา (“ผู้พัฒนา”, “เรา”) และ<strong>ไม่มีส่วนเกี่ยวข้องกับ Microsoft</strong> นโยบายนี้จัดทำโดยคำนึงถึงพระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 (PDPA)</p>
+
+        <p class="note"><strong>สรุปสั้น ๆ:</strong> แอปทำงานในเบราว์เซอร์ของคุณเท่านั้น โน้ตของคุณส่งตรงระหว่างอุปกรณ์ของคุณกับ Microsoft โดยไม่ผ่านเซิร์ฟเวอร์ของเรา เราไม่ได้รับ ไม่ได้เก็บ และไม่ได้เห็นโน้ตของคุณ ไม่มีการติดตามพฤติกรรม ไม่มีโฆษณา และไม่มีสคริปต์ของบุคคลที่สาม</p>
+
+        <h2>1. ข้อมูลที่แอปใช้</h2>
+        <ul>
+          <li><strong>ข้อมูลบัญชี Microsoft:</strong> ชื่อและอีเมลของคุณ เพื่อแสดงว่าใครลงชื่อเข้าใช้อยู่</li>
+          <li><strong>เนื้อหาโน้ต:</strong> ข้อความ รูปภาพ สี สถานะปักหมุด และวันที่ของโน้ตใน Microsoft Sticky Notes ซึ่ง Microsoft เก็บไว้ในโฟลเดอร์ Notes ที่ซ่อนอยู่ในกล่องจดหมายของคุณ</li>
+          <li><strong>ข้อมูลที่บันทึกในอุปกรณ์:</strong> สำเนาโน้ตและรูปภาพ รายการเปลี่ยนแปลงที่รอซิงค์ การตั้งค่า และโทเค็นการลงชื่อเข้าใช้ของ Microsoft ทั้งหมดเก็บไว้ในเบราว์เซอร์บนอุปกรณ์ของคุณเท่านั้น</li>
+        </ul>
+
+        <h2>2. สิทธิ์ที่ขอจาก Microsoft และเหตุผล</h2>
+        <ul>
+          <li><strong>openid, profile</strong> เพื่อลงชื่อเข้าใช้ และอ่านชื่อกับอีเมลของคุณ</li>
+          <li><strong>Mail.ReadWrite</strong> เพราะ Microsoft เก็บ Sticky Notes ไว้ในกล่องจดหมาย และไม่มีสิทธิ์ที่แคบกว่านี้ที่ใช้กับบัญชีส่วนตัวได้ แอปเปิด<strong>เฉพาะโฟลเดอร์ Notes</strong> และโฟลเดอร์รายการที่ถูกลบ (สำหรับโน้ตที่คุณลบหรือกู้คืน) แอป<strong>ไม่เปิด ไม่อ่าน และไม่ส่งอีเมลของคุณ</strong></li>
+          <li><strong>offline_access</strong> เพื่อให้คุณไม่ต้องลงชื่อเข้าใช้ทุกครั้งที่เปิดแอป</li>
+        </ul>
+        <p>คุณยกเลิกสิทธิ์ทั้งหมดได้ทุกเมื่อที่ <a href="https://account.live.com/consent/Manage">account.live.com/consent</a></p>
+
+        <h2>3. ข้อมูลไปที่ไหน</h2>
+        <ul>
+          <li>โน้ตส่งตรงระหว่างอุปกรณ์ของคุณกับ Microsoft Graph ผ่านการเชื่อมต่อที่เข้ารหัส (HTTPS) การประมวลผลข้อมูลโดย Microsoft เป็นไปตาม <a href="https://privacy.microsoft.com/">นโยบายความเป็นส่วนตัวของ Microsoft</a></li>
+          <li>ไฟล์ของแอปให้บริการผ่านผู้ให้บริการโฮสติ้ง (Cloudflare) ซึ่งอาจบันทึกข้อมูลการเข้าถึงตามปกติ เช่น ที่อยู่ IP และประเภทเบราว์เซอร์ เพื่อความปลอดภัยและการทำงานของระบบ ข้อมูลนี้ไม่รวมเนื้อหาโน้ตของคุณ</li>
+          <li>เราไม่ขาย ไม่แบ่งปัน และไม่โอนข้อมูลของคุณให้ผู้ใด เพราะข้อมูลไม่ได้ผ่านเรา</li>
+        </ul>
+
+        <h2>4. ข้อมูลส่วนบุคคลในโน้ตของคุณ</h2>
+        <p>หากคุณบันทึกข้อมูลส่วนบุคคลของผู้อื่นหรือข้อมูลที่มีความอ่อนไหวไว้ในโน้ต <strong>คุณเป็นผู้รับผิดชอบ</strong>ในการมีฐานทางกฎหมายหรือความยินยอมที่เหมาะสมตาม PDPA เราแนะนำให้:</p>
+        <ul>
+          <li>ใช้แอปบนอุปกรณ์ส่วนตัวที่ตั้งรหัสล็อกหน้าจอและเปิดการเข้ารหัสดิสก์</li>
+          <li>ไม่ใช้บนเครื่องที่ใช้ร่วมกับผู้อื่น หากจำเป็นให้ออกจากระบบทุกครั้งหลังใช้งาน</li>
+          <li>หลีกเลี่ยงการบันทึกข้อมูลที่ระบุตัวบุคคลอื่นได้หากไม่จำเป็น</li>
+        </ul>
+
+        <h2>5. ระยะเวลาการเก็บข้อมูล</h2>
+        <ul>
+          <li><strong>บนอุปกรณ์ของคุณ:</strong> จนกว่าคุณจะออกจากระบบ (ซึ่งจะลบสำเนาทั้งหมดออกจากอุปกรณ์) หรือล้างข้อมูลเว็บไซต์ในเบราว์เซอร์ หากบัญชีอื่นลงชื่อเข้าใช้บนอุปกรณ์เดียวกัน แอปจะลบข้อมูลเดิมก่อน</li>
+          <li><strong>ที่ Microsoft:</strong> ตามการตั้งค่าบัญชีและนโยบายของ Microsoft โน้ตที่ลบจะย้ายไปที่รายการที่ถูกลบ ซึ่ง Outlook อาจล้างเองเมื่อเวลาผ่านไป</li>
+        </ul>
+
+        <h2>6. การรักษาความปลอดภัย</h2>
+        <p>แอปไม่โหลดสคริปต์จากภายนอก ใช้นโยบายความปลอดภัยของเนื้อหา (CSP) ที่เข้มงวด สร้างเนื้อหาโน้ตใหม่จากข้อความเท่านั้นเพื่อป้องกันโค้ดแฝง และเชื่อมต่อกับ Microsoft ผ่าน HTTPS เท่านั้น อย่างไรก็ตาม ไม่มีระบบใดปลอดภัยได้ 100% ความปลอดภัยของอุปกรณ์และบัญชีของคุณจึงสำคัญเช่นกัน</p>
+
+        <h2>7. สิทธิของคุณ</h2>
+        <p>ภายใต้ PDPA คุณมีสิทธิ์เข้าถึง แก้ไข ลบ ระงับการใช้ คัดค้าน และขอโอนย้ายข้อมูลของคุณ เนื่องจากเราไม่ได้เก็บข้อมูลของคุณ คุณจึงใช้สิทธิ์เหล่านี้ได้โดยตรง: แก้ไขหรือลบโน้ตในแอปหรือใน Sticky Notes ลบข้อมูลในอุปกรณ์โดยการออกจากระบบ ยกเลิกสิทธิ์ที่ account.live.com/consent และติดต่อ Microsoft สำหรับข้อมูลที่ Microsoft เก็บ หากมีข้อสงสัย ติดต่อเราได้ตามช่องทางด้านล่าง คุณยังมีสิทธิ์ร้องเรียนต่อสำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคล (สคส.)</p>
+
+        <h2>8. เด็ก</h2>
+        <p>แอปนี้ไม่ได้มีไว้สำหรับบุคคลอายุต่ำกว่า 20 ปีที่ยังไม่ได้รับความยินยอมจากผู้ใช้อำนาจปกครองตามกฎหมาย</p>
+
+        <h2>9. การเปลี่ยนแปลงนโยบาย</h2>
+        <p>เราอาจปรับปรุงนโยบายนี้เป็นครั้งคราว โดยจะแสดงวันที่มีผลใหม่ไว้ที่ด้านบนของหน้านี้</p>
+
+        <h2>10. ติดต่อเรา</h2>
+        <p>อีเมล: <span class="email">naphats.saokm (at) gmail (dot) com</span></p>
+        <p class="meta">หากฉบับภาษาไทยและภาษาอังกฤษไม่ตรงกัน ให้ถือฉบับภาษาไทยเป็นหลัก</p>
+      </article>
+
+      <article data-lang-block="en" hidden>
+        <h1>Privacy statement</h1>
+        <p class="meta">Effective 26 October 2026</p>
+
+        <p>This statement explains how the <strong>Notes</strong> app (“the app”) handles your information. The app is built and maintained by an individual (“the developer”, “we”) and is <strong>not affiliated with Microsoft</strong>. It is written with Thailand's Personal Data Protection Act B.E. 2562 (2019) (PDPA) in mind.</p>
+
+        <p class="note"><strong>In short:</strong> the app runs only in your browser. Your notes travel directly between your device and Microsoft, never through a server of ours. We don't receive, store or see your notes. There's no tracking, no advertising and no third-party scripts.</p>
+
+        <h2>1. Information the app uses</h2>
+        <ul>
+          <li><strong>Microsoft account details:</strong> your name and email, to show who is signed in.</li>
+          <li><strong>Note content:</strong> the text, images, colour, pinned state and dates of your Microsoft Sticky Notes, which Microsoft keeps in a hidden Notes folder of your mailbox.</li>
+          <li><strong>Information stored on your device:</strong> a copy of your notes and images, changes waiting to sync, your settings, and Microsoft sign-in tokens. All of it stays in the browser on your device.</li>
+        </ul>
+
+        <h2>2. Permissions requested from Microsoft, and why</h2>
+        <ul>
+          <li><strong>openid, profile</strong>, to sign you in and read your name and email.</li>
+          <li><strong>Mail.ReadWrite</strong>, because Microsoft stores Sticky Notes in your mailbox and no narrower permission works with personal accounts. The app opens <strong>only the Notes folder</strong>, plus Deleted Items for notes you delete or restore. It <strong>never opens, reads or sends your emails</strong>.</li>
+          <li><strong>offline_access</strong>, so you don't have to sign in every time you open the app.</li>
+        </ul>
+        <p>You can remove all of these at any time at <a href="https://account.live.com/consent/Manage">account.live.com/consent</a>.</p>
+
+        <h2>3. Where information goes</h2>
+        <ul>
+          <li>Notes travel directly between your device and Microsoft Graph over an encrypted connection (HTTPS). Microsoft's processing is governed by the <a href="https://privacy.microsoft.com/">Microsoft Privacy Statement</a>.</li>
+          <li>The app's files are served by a hosting provider (Cloudflare), which may keep standard access logs such as IP address and browser type for security and operation. These logs don't include your notes.</li>
+          <li>We don't sell, share or transfer your information to anyone, because it doesn't pass through us.</li>
+        </ul>
+
+        <h2>4. Personal information in your notes</h2>
+        <p>If you record other people's personal information, or anything sensitive, in your notes, <strong>you are responsible</strong> for having an appropriate legal basis or consent under the PDPA. We recommend that you:</p>
+        <ul>
+          <li>use the app on a personal device with a screen lock and disk encryption;</li>
+          <li>avoid shared computers, or sign out after every use;</li>
+          <li>avoid writing details that identify other people unless necessary.</li>
+        </ul>
+
+        <h2>5. How long information is kept</h2>
+        <ul>
+          <li><strong>On your device:</strong> until you sign out (which removes the device copy) or clear the site's data in your browser. If a different account signs in on the same device, the app removes the previous data first.</li>
+          <li><strong>At Microsoft:</strong> according to your account settings and Microsoft's policies. Deleted notes move to Deleted Items, which Outlook may empty over time.</li>
+        </ul>
+
+        <h2>6. Security</h2>
+        <p>The app loads no outside scripts, uses a strict Content Security Policy, rebuilds note content from text only so nothing in a note can run as code, and talks to Microsoft only over HTTPS. No system is completely secure, so the security of your device and account matters too.</p>
+
+        <h2>7. Your rights</h2>
+        <p>Under the PDPA you have the right to access, correct, delete, restrict, object to and port your personal data. Since we don't hold your data, you can exercise these directly: edit or delete notes in the app or in Sticky Notes, remove the device copy by signing out, remove the app's access at account.live.com/consent, and contact Microsoft about data Microsoft holds. For questions, contact us below. You may also complain to Thailand's Personal Data Protection Committee (PDPC).</p>
+
+        <h2>8. Children</h2>
+        <p>The app is not intended for anyone under 20 without the consent of a parent or legal guardian.</p>
+
+        <h2>9. Changes</h2>
+        <p>We may update this statement from time to time and will show the new effective date at the top of this page.</p>
+
+        <h2>10. Contact</h2>
+        <p>Email: <span class="email">naphats.saokm (at) gmail (dot) com</span></p>
+        <p class="meta">If the Thai and English versions differ, the Thai version prevails.</p>
+      </article>
+
+      <footer><a href="/terms.html">ข้อกำหนดการใช้งาน · Terms of service</a></footer>
+    </div>
+    <script src="/legal.js"></script>
+  </body>
+</html>

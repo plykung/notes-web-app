@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content" />
+    <!-- Notes hold sensitive data and the login can reach the mailbox: allow no third-party code. -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://graph.microsoft.com https://login.microsoftonline.com ws://localhost:5173; frame-src https://login.microsoftonline.com https://login.live.com; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+    />
+    <title>Notes</title>
+    <meta name="description" content="Your Microsoft Sticky Notes on every device." />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" href="/icon-192.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#f4f3ef" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1b1b1d" media="(prefers-color-scheme: dark)" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Notes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  </head>
+  <body>
+    <main id="landing" class="landing" hidden>
+      <img src="/icon-192.png" alt="" width="72" height="72" class="landing-icon" />
+      <h1 data-i18n="landTitle"></h1>
+      <p class="lead" data-i18n="landLead"></p>
+      <section class="landing-card">
+        <h2 data-i18n="landPermsTitle"></h2>
+        <ul class="perms">
+          <li><strong data-i18n="landPermProfile"></strong><span data-i18n="landPermProfileWhy"></span></li>
+          <li><strong data-i18n="landPermMail"></strong><span data-i18n="landPermMailWhy"></span></li>
+          <li><strong data-i18n="landPermOffline"></strong><span data-i18n="landPermOfflineWhy"></span></li>
+        </ul>
+      </section>
+      <section class="landing-card">
+        <h2 data-i18n="landPrivacyTitle"></h2>
+        <ul class="privacy">
+          <li data-i18n="landPrivacy1"></li>
+          <li data-i18n="landPrivacy2"></li>
+          <li data-i18n="landPrivacy3"></li>
+        </ul>
+      </section>
+      <button id="signin" class="signin primary" data-i18n="signIn">Sign in with Microsoft</button>
+      <p class="hint" data-i18n="landPersonal"></p>
+      <p class="hint" data-i18n="landAgree"></p>
+      <nav class="legal-links">
+        <a data-legal="terms" href="/terms.html" data-i18n="termsLink">Terms of service</a>
+        <span aria-hidden="true">·</span>
+        <a data-legal="privacy" href="/privacy.html" data-i18n="privacyLink">Privacy statement</a>
+      </nav>
+      <div class="landing-lang" role="group" aria-label="Language / ภาษา">
+        <button data-lang="en">English</button>
+        <button data-lang="th">ไทย</button>
+      </div>
+    </main>
+
+    <div id="app">
+      <div id="progress" class="progress" hidden><div id="progress-fill"></div></div>
+
+      <header class="topbar">
+        <button id="sync-status" class="sync-status" data-i18n-title="syncStatus" aria-controls="sync-pop" aria-expanded="false"></button>
+        <div id="sync-pop" class="sync-pop" hidden>
+          <p id="sync-pop-text"></p>
+          <p id="sync-pop-time" class="hint"></p>
+          <button id="sync-pop-now" class="primary" data-i18n="syncNow">Sync now</button>
+        </div>
+        <div class="searchbox">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" />
+            <path d="m20 20-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
+          <span id="active-tags" class="active-tags"></span>
+          <input id="search" name="q" type="search" aria-controls="tag-panel" aria-expanded="false" data-i18n-placeholder="search" placeholder="Search" autocomplete="off" enterkeyhint="search" />
+          <button id="clear-search" class="clear" data-i18n-title="clearSearch" hidden>✕</button>
+        </div>
+        <button id="menu-btn" class="avatar" data-i18n-title="menu" aria-controls="menu" aria-expanded="false"></button>
+        <div id="menu" class="menu" hidden>
+          <p id="account" class="menu-account"></p>
+          <button id="menu-refresh"><span data-i18n="refresh">Refresh</span></button>
+          <button id="menu-deleted"><span data-i18n="recentlyDeleted">Recently deleted</span></button>
+          <button id="menu-settings"><span data-i18n="settings">Settings</span></button>
+          <button id="menu-install" hidden><span data-i18n="install">Install app</span></button>
+          <button id="menu-signout"><span data-i18n="signOut">Sign out</span></button>
+        </div>
+        <div id="tag-panel" class="tag-panel" hidden></div>
+      </header>
+
+      <div id="ptr" class="ptr" hidden aria-hidden="true">↻</div>
+
+      <div id="viewbar" class="viewbar" hidden>
+        <button id="viewbar-back" data-i18n-title="back">←</button>
+        <div>
+          <strong data-i18n="recentlyDeleted">Recently deleted</strong>
+          <small data-i18n="deletedHint"></small>
+        </div>
+      </div>
+
+      <div id="error" class="error" role="alert" hidden>
+        <span></span>
+        <button id="retry" class="icon-btn" data-i18n-title="tryAgain"></button>
+      </div>
+
+      <p id="count" class="count" hidden></p>
+      <main id="notes" class="notes"></main>
+
+      <button id="new" class="fab" data-i18n-title="newNote">+</button>
+    </div>
+
+    <dialog id="editor" class="editor" data-i18n-label="note">
+      <div class="editor-head">
+        <button id="editor-popout" class="icon-btn" data-i18n-title="popOut">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M14 4h6v6M20 4l-8 8M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+        </button>
+        <button id="editor-close" class="icon-btn" data-i18n-title="close">✕</button>
+      </div>
+      <div id="editor-mount"></div>
+    </dialog>
+
+    <dialog id="compare" class="compare" aria-labelledby="compare-heading">
+      <h2 id="compare-heading" data-i18n="compareHeading"></h2>
+      <p id="compare-info"></p>
+      <div class="compare-cols">
+        <section class="side mine">
+          <h3><span data-i18n="yourEdit"></span> <small data-i18n="notSavedYet"></small></h3>
+          <div id="compare-mine" class="diff"></div>
+          <button id="compare-mine-btn" class="primary"></button>
+        </section>
+        <section class="side saved">
+          <h3 id="compare-saved-title"></h3>
+          <div id="compare-saved" class="diff"></div>
+          <button id="compare-saved-btn"></button>
+        </section>
+      </div>
+      <button id="compare-both" class="wide" data-i18n="keepBoth"></button>
+      <p id="compare-hint" class="hint" data-i18n="compareHint"></p>
+    </dialog>
+
+    <dialog id="settings" class="settings" aria-labelledby="settings-heading">
+      <h2 id="settings-heading" data-i18n="settings">Settings</h2>
+      <label class="row"><span data-i18n="setTheme"></span><select id="set-theme"></select></label>
+      <label class="row"><span data-i18n="setLanguage"></span><select id="set-language"></select></label>
+      <label class="row"><span data-i18n="setLines"></span><select id="set-lines"></select></label>
+      <label class="row">
+        <span><span data-i18n="setAutosave"></span><small data-i18n="setAutosaveHint"></small></span>
+        <select id="set-autosave"></select>
+      </label>
+      <label class="row">
+        <span><span data-i18n="setSync"></span><small data-i18n="setSyncHint"></small></span>
+        <select id="set-syncdelay"></select>
+      </label>
+      <label class="row">
+        <span><span data-i18n="setImages"></span><small data-i18n="setImagesHint"></small></span>
+        <input id="set-images" type="checkbox" />
+      </label>
+      <h3 data-i18n="onDevice"></h3>
+      <dl id="set-storage" class="storage"></dl>
+      <p class="hint" data-i18n="storageHint"></p>
+      <nav class="legal-links">
+        <a data-legal="terms" href="/terms.html" target="_blank" rel="noopener" data-i18n="termsLink">Terms of service</a>
+        <span aria-hidden="true">·</span>
+        <a data-legal="privacy" href="/privacy.html" target="_blank" rel="noopener" data-i18n="privacyLink">Privacy statement</a>
+      </nav>
+      <div class="actions">
+        <button id="set-resync" data-i18n="resync"></button>
+        <span class="spacer"></span>
+        <button id="set-close" class="primary" data-i18n="done"></button>
+      </div>
+    </dialog>
+
+    <script type="module" src="/src/app.ts"></script>
+  </body>
+</html>

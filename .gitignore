@@ -1,0 +1,24 @@
+# Dependencies and build output
+node_modules/
+dist/
+.wrangler/
+
+# Local settings and secrets (the Entra client ID goes in .env; see .env.example)
+.env
+.env.*
+!.env.example
+.dev.vars*
+
+# Personal data: Google Takeout exports and any other note dumps
+*.zip
+takeout*/
+
+# AI-assistant tooling installed locally (not part of the app)
+.agents/
+.claude/
+skills-lock.json
+
+# OS and editor clutter
+.DS_Store
+Thumbs.db
+*.log
