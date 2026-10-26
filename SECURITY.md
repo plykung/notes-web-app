@@ -11,7 +11,7 @@ Only the current `main` branch, which is what's deployed at https://notes.naphat
 **Please don't open a public issue for security problems.** Report them privately instead:
 
 - **GitHub:** use **Security → Report a vulnerability** on this repository (private vulnerability reporting), or
-- **Email:** naphats.saokm (at) gmail (dot) com, with "Security: Notes" in the subject.
+- **Email:** notes (at) naphats (dot) me, with "Security: Notes" in the subject.
 
 Please include:
 - what the problem is and where (a file, URL or screen);
