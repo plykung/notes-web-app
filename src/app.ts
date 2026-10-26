@@ -5,6 +5,7 @@ import { noteHtmlFor, parseActionLink, savePending, sharedNoteHtml, takePending,
 import { initAuth, signIn, signInAgain, signOut } from "./auth";
 import { chooseConflictVersion, flushOpenEditor, openEditor, openSettings } from "./dialogs";
 import { deleteShare, readShare } from "./share";
+import { showAllReleases, watchForUpdates } from "./updates";
 import { DuplicateError, NO_IMAGE_CHANGES, listDeletedNotes, removeOldVersion, restoreNote } from "./graph";
 import { imageStats, noteImages, prepareImage, renderThumbs, whenVisible } from "./images";
 import {
@@ -739,6 +740,7 @@ function setUpMenu(username: string, initial: string) {
         render();
       },
       fullResync: () => refresh({ manual: true, full: true }),
+      whatsNew: showAllReleases,
     });
   };
   $("menu-signout").onclick = async () => {
@@ -894,9 +896,7 @@ function showLanding() {
 }
 
 async function start() {
-  if (import.meta.env.PROD && "serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/sw.js").catch((err) => console.error("Offline support unavailable", err));
-  }
+  watchForUpdates();
   // Ask the browser not to clear the notes kept on this device when space runs low.
   navigator.storage?.persist?.().catch(() => {});
   applySettings();
@@ -947,8 +947,15 @@ async function start() {
   render(); // notes saved on this device, before anything from the network
 
   // Refresh when the user comes back to the app (docs/adr/0001: no push from Graph).
-  document.addEventListener("visibilitychange", () => {
+  document.addEventListener("visibilitychange", async () => {
     if (document.visibilityState === "visible" && Date.now() - lastRefresh > 10_000) refresh();
+    // Leaving the app: save the open note and send queued changes right away.
+    // The page may be frozen within seconds, and timers (the quiet period)
+    // stop then. A send cut off midway is retried safely (docs/adr/0004: OpIds).
+    if (document.visibilityState === "hidden") {
+      await flushOpenEditor();
+      sync();
+    }
   });
   // Notes load in the background while an action opens what it asked for.
   const refreshing = refresh();

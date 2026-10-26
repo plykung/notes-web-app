@@ -16,6 +16,8 @@ export type Settings = {
   theme: Theme;
   language: Language;
   pinnedCollapsed: boolean;
+  /** Show a toast for new Releases. Releases that need a reload or reinstall always show one. */
+  updateToasts: boolean;
 };
 
 const KEY = "notes-settings";
@@ -27,6 +29,7 @@ const DEFAULTS: Settings = {
   theme: "system",
   language: navigator.language?.toLowerCase().startsWith("th") ? "th" : "en",
   pinnedCollapsed: false,
+  updateToasts: true,
 };
 
 // Read often (every piece of translated text), so kept in memory.

@@ -80,12 +80,30 @@ const TOAST_ICONS: Record<ToastKind, keyof typeof ICONS> = {
   saved: "check",
 };
 
+export type ToastAction = { label: string; run: () => void };
+export type ToastOptions = {
+  /** Stays until closed with ✕ (and comes back after any short toast shown meanwhile). */
+  sticky?: boolean;
+  /** Called when the user closes a sticky toast with ✕. */
+  onClose?: () => void;
+};
+
+let stickyToast: { show: () => void } | null = null;
+let focusHandlers = { pause: () => {}, resume: () => {} };
+
 /**
  * A short message at the bottom of the screen with an icon for its kind, and
- * optionally one action such as Undo. It waits while the pointer or keyboard
+ * optionally actions such as Undo. It waits while the pointer or keyboard
  * focus is on it.
  */
-export function toast(kind: ToastKind, message: string, action?: { label: string; run: () => void }, doc = document) {
+export function toast(
+  kind: ToastKind,
+  message: string,
+  action?: ToastAction | ToastAction[],
+  doc = document,
+  opts: ToastOptions = {},
+) {
+  const actions = action ? (Array.isArray(action) ? action : [action]) : [];
   let el = doc.getElementById("toast");
   if (!el) {
     el = doc.createElement("div");
@@ -96,7 +114,12 @@ export function toast(kind: ToastKind, message: string, action?: { label: string
     doc.body.append(el);
   }
   const box = el;
-  const hide = () => (box.hidden = true);
+  const hide = () => {
+    box.hidden = true;
+    // A sticky toast that was covered by this one comes back.
+    if (!opts.sticky && stickyToast) setTimeout(() => stickyToast?.show(), 200);
+  };
+  if (opts.sticky) stickyToast = { show: () => toast(kind, message, action, doc, opts) };
   const startTimer = (ms: number) => {
     clearTimeout(toastTimer);
     toastLeft = ms;
@@ -107,13 +130,16 @@ export function toast(kind: ToastKind, message: string, action?: { label: string
     clearTimeout(toastTimer);
     toastLeft -= Date.now() - toastSince;
   };
-  const resume = () => startTimer(Math.max(toastLeft, 1500));
+  const resume = () => {
+    if (!opts.sticky) startTimer(Math.max(toastLeft, 1500));
+  };
   box.onpointerenter = pause;
   box.onpointerleave = resume;
+  focusHandlers = { pause, resume };
   if (!box.dataset.wired) {
-    box.dataset.wired = "1"; // focusin/out have no on- properties; add them once
-    box.addEventListener("focusin", () => pause());
-    box.addEventListener("focusout", () => resume());
+    box.dataset.wired = "1"; // focusin/out have no on- properties: add them once, calling the current toast's
+    box.addEventListener("focusin", () => focusHandlers.pause());
+    box.addEventListener("focusout", () => focusHandlers.resume());
   }
 
   // Filled on the next frame so screen readers notice the live region change.
@@ -126,18 +152,32 @@ export function toast(kind: ToastKind, message: string, action?: { label: string
     text.className = "toast-text";
     text.textContent = message;
     box.replaceChildren(icon, text);
-    if (action) {
+    for (const a of actions) {
       const btn = doc.createElement("button");
       btn.className = "toast-action";
-      btn.textContent = action.label;
+      btn.textContent = a.label;
       btn.onclick = () => {
+        if (opts.sticky) stickyToast = null;
         hide();
-        action.run();
+        a.run();
       };
       box.append(btn);
     }
+    if (opts.sticky) {
+      const close = doc.createElement("button");
+      close.className = "toast-close";
+      close.setAttribute("aria-label", t("close"));
+      close.innerHTML = ICONS.close;
+      close.onclick = () => {
+        stickyToast = null;
+        hide();
+        opts.onClose?.();
+      };
+      box.append(close);
+    }
     box.hidden = false;
-    startTimer(action ? 6000 : 3500);
+    if (opts.sticky) clearTimeout(toastTimer);
+    else startTimer(actions.length ? 6000 : 3500);
   });
 }
 

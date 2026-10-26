@@ -24,6 +24,25 @@
   for (const btn of document.querySelectorAll("[data-lang]")) btn.addEventListener("click", () => show(btn.dataset.lang));
   show(wanted);
 
+  // Shortcuts page: the one-tap "Get Shortcut" links, one place for both
+  // languages. Paste each shortcut's iCloud link here (Share → Copy iCloud Link).
+  // After editing a shortcut, paste its NEW link: old links don't update
+  // (docs/adr/0006). Empty ones stay hidden, and so does the section if all are.
+  const ICLOUD_SHORTCUTS = {
+    new: "",
+    "new-voice": "",
+    latest: "",
+    search: "",
+  };
+  for (const a of document.querySelectorAll("a[data-shortcut]")) {
+    const link = ICLOUD_SHORTCUTS[a.dataset.shortcut] ?? "";
+    if (link.startsWith("https://www.icloud.com/shortcuts/")) {
+      a.href = link;
+      a.hidden = false;
+      a.closest("[data-one-tap]").hidden = false;
+    }
+  }
+
   // Shortcuts page: links use this site's own address, with a copy button each.
   for (const code of document.querySelectorAll("code[data-link]")) code.textContent = location.origin + code.dataset.link;
   for (const btn of document.querySelectorAll("button[data-copy]")) {

@@ -874,3 +874,16 @@ dialog.images[open] { animation: fade-in 180ms ease-out; }
 .toast-icon.pinned svg { fill: currentColor; }
 .toast-icon.attention { color: #ff8a80; }
 .toast-text { min-width: 0; overflow-wrap: anywhere; }
+
+/* ---------- What's New (updates.ts) ---------- */
+.whats-new { width: min(520px, calc(100vw - 32px)); }
+.whats-new-body { max-height: 55dvh; overflow-y: auto; }
+.whats-new-body h3 { margin: 14px 0 4px; font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.whats-new-body ul { margin: 0; padding-left: 20px; }
+.whats-new-body li { margin: 4px 0; }
+.whats-new-body .steps { white-space: pre-line; margin: 14px 0 0; padding: 10px 12px; border-radius: 8px; background: var(--surface); }
+.whats-new .actions { justify-content: space-between; }
+.dont-show { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+.dont-show input { width: 18px; height: 18px; }
+.toast-close { flex: none; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; color: #ccc; }
+.toast-close svg { width: 16px; height: 16px; }

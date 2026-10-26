@@ -1,7 +1,7 @@
 // Lets the app open with no connection. Only this site's own files are cached;
 // requests to Microsoft (sign-in, Graph) are never touched. Notes themselves
 // live in IndexedDB (src/store.ts), not here.
-const CACHE = "notes-app-shell-v3";
+const CACHE = "notes-app-shell-v4";
 
 // ---------- Share into Notes (manifest "share_target") ----------
 // Android's share sheet POSTs here. The share is kept in its own database
@@ -63,6 +63,8 @@ self.addEventListener("fetch", (event) => {
     return;
   }
   if (request.method !== "GET" || url.origin !== self.location.origin) return;
+  // The newest Release: always ask the server, never a saved copy.
+  if (url.pathname === "/version.json") return;
 
   if (request.mode === "navigate") {
     // The page: newest when online, the saved copy when offline. Only a good

@@ -48,6 +48,14 @@ _Avoid_: Saved link, queued action (a Queued Change is something else)
 The note edited most recently anywhere (on any Device or in the PC app), as known after a refresh.
 _Avoid_: Recent note, last note, newest note
 
+**Release**:
+A version of the Notes Web App that has an entry in the changelog: a version number, a date, notes for users, and what they need to do to get it (nothing, reload, or reinstall). Deploys without an entry are silent fixes, not Releases.
+_Avoid_: Build, deploy, update (a deploy may not be a Release)
+
+**What's New**:
+The pop-up that lists the Releases since the last one the user saw, and any step they need to take.
+_Avoid_: Changelog popup, release notes dialog
+
 **Device**:
 A screen the user reads notes on: the Windows PC, a phone or an iPad.
 _Avoid_: Platform, client

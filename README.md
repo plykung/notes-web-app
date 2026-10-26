@@ -41,6 +41,10 @@ npm run dev               # http://localhost:5173
 | `npm run deploy:check` | Build and a Cloudflare dry run |
 | `npm run deploy` | Build and deploy to Cloudflare Workers |
 
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md), generated from [src/changelog.ts](src/changelog.ts) at build time. Adding a Release there is what shows users the What's New pop-up; deploys without a new entry are silent fixes.
+
 ## Deploy
 
 See [docs/deploy.md](docs/deploy.md): the Entra settings for public users, Cloudflare Workers static assets, capacity and limits, and the pre-launch and security checklists.

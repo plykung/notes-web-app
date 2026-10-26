@@ -2,6 +2,11 @@
 // (GLOSSARY.md). They never save, delete or change a note by themselves: they
 // only open the editor or the search, and the user's own typing or closing
 // saves. A link tapped while signed out becomes a Pending Action.
+//
+// PUBLIC CONTRACT (docs/adr/0006): these addresses are baked into shared iCloud
+// shortcuts, Android shortcuts and bookmarks that can't be updated. Never
+// rename or remove an action or parameter; only add. The "published links"
+// tests in actions.test.ts must keep passing unchanged.
 import { COLORS, type NoteColor } from "./note";
 import { toNoteHtml, withTagLine } from "./serialize";
 

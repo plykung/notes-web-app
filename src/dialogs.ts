@@ -94,9 +94,6 @@ popOutBtn.onclick = async () => {
 };
 
 $("editor-close").onclick = () => closeEditor();
-document.addEventListener("visibilitychange", () => {
-  if (document.visibilityState === "hidden") editor?.flush();
-});
 editorDialog.addEventListener("cancel", (e) => {
   e.preventDefault();
   closeEditor();
@@ -202,6 +199,7 @@ export async function openSettings(deps: {
   report: () => Promise<StorageReport>;
   changed: (s: Settings) => void;
   fullResync: () => void;
+  whatsNew: () => void;
 }) {
   const dialog = $<HTMLDialogElement>("settings");
   const fill = () => {
@@ -229,6 +227,7 @@ export async function openSettings(deps: {
       String(s.syncDelaySeconds),
     );
     ($("set-images") as HTMLInputElement).checked = s.offlineImages;
+    ($("set-updates") as HTMLInputElement).checked = s.updateToasts;
   };
   fill();
 
@@ -249,6 +248,12 @@ export async function openSettings(deps: {
   onSelect("set-syncdelay", (v) => ({ syncDelaySeconds: Number(v) }));
   const offline = $<HTMLInputElement>("set-images");
   offline.onchange = () => deps.changed(saveSettings({ offlineImages: offline.checked }));
+  const updates = $<HTMLInputElement>("set-updates");
+  updates.onchange = () => deps.changed(saveSettings({ updateToasts: updates.checked }));
+  $("set-whatsnew").onclick = () => {
+    dialog.close();
+    deps.whatsNew();
+  };
   $("set-resync").onclick = () => {
     dialog.close();
     deps.fullResync();

@@ -46,6 +46,29 @@ describe("parseActionLink", () => {
   });
 });
 
+// docs/adr/0006: these exact addresses are in shared shortcuts and must keep
+// working. If one of these fails, the change broke installed shortcuts: fix the
+// code, never these examples.
+describe("published links (public contract)", () => {
+  const published: [string, unknown][] = [
+    ["/?action=new", { kind: "new" }],
+    ["/?action=new&text=buy%20milk", { kind: "new", text: "buy milk" }],
+    ["/?action=new&tag=shopping&color=green", { kind: "new", tag: "shopping", color: "green" }],
+    ["/?action=latest", { kind: "latest" }],
+    ["/?action=search", { kind: "search" }],
+    ["/?action=search&q=coffee", { kind: "search", q: "coffee" }],
+  ];
+  for (const [address, meaning] of published) {
+    it(`still understands ${address}`, () => {
+      expect(parseActionLink(new URL(`https://notes.naphats.me${address}`))).toEqual(meaning);
+    });
+  }
+
+  it("still opens the app for a link from a newer version, ignoring what it doesn't know", () => {
+    expect(parseActionLink(new URL("https://notes.naphats.me/?action=new&text=hi&future=1"))).toEqual({ kind: "new", text: "hi" });
+  });
+});
+
 describe("Pending Action", () => {
   beforeEach(() => sessionStorage.clear());
 
