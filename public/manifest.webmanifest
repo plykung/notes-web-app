@@ -2,7 +2,7 @@
   "id": "/",
   "name": "Notes",
   "short_name": "Notes",
-  "description": "Your Microsoft Sticky Notes on every device.",
+  "description": "Your notes on every device, even offline. Works with Microsoft Sticky Notes.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

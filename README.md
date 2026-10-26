@@ -1,6 +1,6 @@
 # Notes
 
-Your Microsoft Sticky Notes on every device: PC, iPad and phone. An offline-first PWA that reads and edits Sticky Notes through Microsoft Graph, straight from the browser, with no server in between.
+**Notes** puts your notes on every device: PC, iPad and phone. An offline-first PWA that works with Microsoft Sticky Notes, through Microsoft Graph, straight from the browser, with no server in between.
 
 **Live:** https://notes-web-app.naphats.workers.dev
 
@@ -43,6 +43,10 @@ npm run dev               # http://localhost:5173
 ## Deploy
 
 See [docs/deploy.md](docs/deploy.md): the Entra settings for public users, Cloudflare Workers static assets, capacity and limits, and the pre-launch and security checklists.
+
+## Security
+
+See [SECURITY.md](SECURITY.md) to report a vulnerability.
 
 ## Privacy
 

@@ -1,7 +1,7 @@
 {
   "name": "notes-web-app",
   "version": "1.0.0",
-  "description": "Microsoft Sticky Notes on every device: an offline-first PWA",
+  "description": "Notes on every device: an offline-first PWA that works with Microsoft Sticky Notes",
   "scripts": {
     "test": "vitest run",
     "dev": "vite",
