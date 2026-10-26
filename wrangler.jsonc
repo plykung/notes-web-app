@@ -8,5 +8,25 @@
   "assets": {
     // `npm run build` output. Security and cache headers: public/_headers.
     "directory": "./dist"
+  },
+  // Matches the dashboard's observability settings, so a deploy doesn't undo them.
+  "observability": {
+    // Logs keep request URLs; drop query strings from them (privacy statement, section 3).
+    "redact_query_string": true,
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "invocation_logs": true,
+      "persist": true
+    },
+    "traces": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "persist": true
+    },
+    // The dashboard calls this "issue_detection"; Wrangler 4.152's config key is "issues".
+    "issues": {
+      "enabled": true
+    }
   }
 }

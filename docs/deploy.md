@@ -25,7 +25,7 @@ In [entra.microsoft.com](https://entra.microsoft.com) → App registrations → 
 | Redirect URIs | `http://localhost:5173` (development), `https://notes-web-app.<your-subdomain>.workers.dev`, and your custom domain if you add one, e.g. `https://notes.example.com`. They must match exactly: no trailing slash, and HTTPS in production. |
 | Implicit grant | **Off**. MSAL uses the authorization-code flow with PKCE. |
 | API permissions | Microsoft Graph, delegated: **Mail.ReadWrite**. You can remove `User.Read`, since the app no longer requests it. `openid`, `profile` and `offline_access` are added automatically at sign-in. |
-| Branding | Name "Notes", the logo from `public/icon-512.png`, home page URL, **Terms of service URL** `https://<domain>/terms.html`, **Privacy statement URL** `https://<domain>/privacy.html`. Microsoft shows these on the consent screen. |
+| Branding | Name "Notes", the logo from `public/icon-512.png`, home page URL, **Terms of service URL** `https://<domain>/terms`, **Privacy statement URL** `https://<domain>/privacy`. Microsoft shows these on the consent screen. Cloudflare serves the pages at these clean URLs; the `.html` addresses redirect to them. |
 | Publisher verification | **Strongly recommended before public launch.** Unverified apps show "unverified" on the consent screen, which matters for an app asking for Mail.ReadWrite. It needs a Microsoft AI Cloud Partner Program (MPN) ID; see [Publisher verification](https://learn.microsoft.com/entra/identity-platform/publisher-verification-overview). |
 
 **Why Mail.ReadWrite:** Microsoft's dedicated Sticky Notes permission (`ShortNotes.ReadWrite`) returns 403 for personal accounts. The only working route is the mail API on the mailbox's Notes folder ([ADR 0001](adr/0001-sticky-notes-is-the-hub.md)). The code touches only the Notes folder, plus Deleted Items for delete and restore. The consent screen still says "read and write your mail", and the landing page and Privacy statement explain why.
@@ -33,6 +33,8 @@ In [entra.microsoft.com](https://entra.microsoft.com) → App registrations → 
 The client ID is **not a secret**: it's public in every SPA. It goes in `VITE_ENTRA_CLIENT_ID` at build time.
 
 ## 2. Cloudflare
+
+**Live:** https://notes-web-app.naphats.workers.dev. It deploys from `main` on github.com/plykung/notes-web-app through Workers Builds. Logs, traces and issue detection are on (`observability` in [wrangler.jsonc](../wrangler.jsonc), kept in step with the dashboard so a deploy doesn't undo them).
 
 ### One-time setup (Workers Builds, recommended)
 
