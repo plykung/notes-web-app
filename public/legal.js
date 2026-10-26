@@ -29,10 +29,10 @@
   // After editing a shortcut, paste its NEW link: old links don't update
   // (docs/adr/0006). Empty ones stay hidden, and so does the section if all are.
   const ICLOUD_SHORTCUTS = {
-    new: "",
-    "new-voice": "",
-    latest: "",
-    search: "",
+    new: "https://www.icloud.com/shortcuts/c354c41ca6e24d7ca1cf4fa9491cd64d",
+    "new-voice": "https://www.icloud.com/shortcuts/781fc62915414effac53ef3b3b9fc45a",
+    latest: "https://www.icloud.com/shortcuts/928358a7b7f0418cb5b702cdf292220c",
+    search: "https://www.icloud.com/shortcuts/a70157ca984847ea86b2431113e07605",
   };
   for (const a of document.querySelectorAll("a[data-shortcut]")) {
     const link = ICLOUD_SHORTCUTS[a.dataset.shortcut] ?? "";
