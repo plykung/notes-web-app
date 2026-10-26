@@ -17,6 +17,9 @@ export const ICONS = {
   settings: svg('<path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/>'),
   install: svg('<path d="M12 3v12M7 10l5 5 5-5M5 21h14"/>'),
   signOut: svg('<path d="M15 4h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-4M10 17l5-5-5-5M15 12H3"/>'),
+  pin: svg('<path d="M9 4h6l-1 5 3 3v2H7v-2l3-3zM12 14v6"/>'),
+  check: svg('<path d="M5 12l4 4 10-10"/>'),
+  alert: svg('<circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/>'),
   deleted: svg('<path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5M12 7v5l3 2"/>'),
 };
 

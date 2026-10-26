@@ -13,10 +13,22 @@ import { ask, confirmDanger, OK, type GalleryImage } from "./ui";
 
 export type EditorImage = GalleryImage & { added?: NewImage };
 
+/**
+ * Content the editor opens with instead of the note's: unsaved work restored
+ * after a failed save, or a new note pre-filled by an Action Link or a share.
+ */
+export type Draft = {
+  html: string;
+  images: ImageChanges;
+  color?: NoteColor;
+  /** Pre-filled by a link or share: wait for the user to type or close before saving. */
+  fromLink?: boolean;
+};
+
 export type EditorOptions = {
   note: Note | null;
   /** Unsaved work to restore after a failed save. */
-  draft?: { html: string; images: ImageChanges };
+  draft?: Draft;
   /** Saves a change to the note with this id (null: a new note); resolves with the note's id. */
   save: (id: string | null, change: Change) => Promise<string>;
   onChange?: () => void;
@@ -68,7 +80,7 @@ export function createEditor(opts: EditorOptions, doc = document): Editor {
   let noteId = note?.id ?? null;
   const startText = note ? noteText(note.html) : "";
   let pinned = isPinned(opts.draft ? noteText(opts.draft.html) : startText);
-  let color: NoteColor = note ? colorOf(note) : "yellow";
+  let color: NoteColor = note ? colorOf(note) : opts.draft?.color ?? "yellow";
   let images: EditorImage[] = [];
   let removed: string[] = [...(opts.draft?.images.removed ?? [])];
 
@@ -365,7 +377,8 @@ export function createEditor(opts: EditorOptions, doc = document): Editor {
   renderStrip();
   if (note) loadSaved(note);
   showState();
-  if (opts.draft) changed(); // restored work saves itself again
+  // Restored work saves itself again; a link's pre-filled note waits for the user.
+  if (opts.draft && !opts.draft.fromLink) changed();
 
   fileInput.onchange = async () => {
     const files = [...(fileInput.files ?? [])];

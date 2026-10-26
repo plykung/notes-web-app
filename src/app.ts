@@ -1,8 +1,10 @@
 // Notes Web App: offline-first list, search and Tags, with edits queued on the
 // device and synced to Microsoft Sticky Notes (docs/adr/0001, 0003, 0004).
 import "./style.css";
-import { initAuth, signIn, signOut } from "./auth";
-import { chooseConflictVersion, openEditor, openSettings } from "./dialogs";
+import { noteHtmlFor, parseActionLink, savePending, sharedNoteHtml, takePending, type Action } from "./actions";
+import { initAuth, signIn, signInAgain, signOut } from "./auth";
+import { chooseConflictVersion, flushOpenEditor, openEditor, openSettings } from "./dialogs";
+import { deleteShare, readShare } from "./share";
 import { DuplicateError, NO_IMAGE_CHANGES, listDeletedNotes, removeOldVersion, restoreNote } from "./graph";
 import { imageStats, noteImages, prepareImage, renderThumbs, whenVisible } from "./images";
 import {
@@ -174,7 +176,7 @@ async function togglePin(note: Note) {
     html: pin ? withTagLine(html, [PIN_TAG]) : html,
     ...(color && color !== DEFAULT_COLOR ? { color } : {}),
   });
-  toast(pin ? t("pinnedToast") : t("unpinnedToast"));
+  toast("pinned", pin ? t("pinnedToast") : t("unpinnedToast"));
 }
 
 function noteCard(note: Note): HTMLElement {
@@ -251,10 +253,11 @@ const SYNC_ICONS: Record<SyncState, keyof typeof ICONS> = {
 
 /** The sync icon at the top left; its pop-over says what it means. */
 function renderStatus() {
-  const { offline, waiting, syncing, loadError } = status();
+  const { offline, needsSignIn, waiting, syncing, loadError } = status();
   let state: SyncState = "ok";
   let text = t("stSynced");
-  if (view === "deleted" && deletedError) [state, text] = ["error", deletedError];
+  if (needsSignIn) [state, text] = ["error", t("signInAgain")];
+  else if (view === "deleted" && deletedError) [state, text] = ["error", deletedError];
   else if (offline) [state, text] = ["offline", waiting ? t("stOfflineWaiting", { changes: changes(waiting) }) : t("stOffline")];
   else if (loadError) [state, text] = ["error", t("stError", { error: loadError })];
   else if (syncing) [state, text] = ["syncing", t("stSyncing", { changes: changes(Math.max(waiting, 1)) })];
@@ -265,8 +268,26 @@ function renderStatus() {
   syncBtn.title = text;
   syncBtn.setAttribute("aria-label", text);
   $("sync-pop-text").textContent = text;
-  $("sync-pop-now").hidden = offline;
+  $("sync-pop-now").hidden = offline && !needsSignIn;
+  $("sync-pop-now").textContent = needsSignIn ? t("signInShort") : t("syncNow");
   if (!syncPop.hidden) showLastSynced();
+
+  // Ask once each time the login expires, rather than leaving the page by itself.
+  if (needsSignIn && !askedToSignIn) {
+    askedToSignIn = true;
+    toast("attention", t("signInAgain"), { label: t("signInShort"), run: signInAgainNow });
+  }
+  if (!needsSignIn) askedToSignIn = false;
+}
+
+let askedToSignIn = false;
+
+/** Saves what's open, then goes to Microsoft to renew the login. Nothing typed is lost. */
+async function signInAgainNow() {
+  await flushOpenEditor();
+  closePopOuts(); // each saves itself as it closes
+  await new Promise((resolve) => setTimeout(resolve, 300)); // let those saves reach the device
+  await signInAgain();
 }
 
 async function showLastSynced() {
@@ -302,7 +323,8 @@ function setUpSyncStatus() {
   });
   $("sync-pop-now").onclick = () => {
     syncPop.hidden = true;
-    refresh({ manual: true });
+    if (status().needsSignIn) signInAgainNow();
+    else refresh({ manual: true });
   };
 }
 
@@ -455,13 +477,13 @@ async function refresh(opts: { manual?: boolean; full?: boolean } = {}) {
   const fromElsewhere = Math.max(0, changed - sent * 2); // each of our saves replaces one note with another
 
   if (offline) {
-    if (opts.manual) toast(t("stOffline"));
+    if (opts.manual) toast("offline", t("stOffline"));
   } else if (!loadError) {
     const parts = [];
     if (sent) parts.push(t("syncedToast", { changes: changes(sent) }));
     if (fromElsewhere) parts.push(t("updatedElsewhere", { n: fromElsewhere }));
-    if (parts.length) toast(parts.join(" · "));
-    else if (opts.manual) toast(t("upToDate"));
+    if (parts.length) toast(sent ? "success" : "updated", parts.join(" · "));
+    else if (opts.manual) toast("success", t("upToDate"));
   }
 }
 
@@ -498,7 +520,7 @@ async function explainFailure(op: Op, err: unknown) {
 
 async function removeNote(note: Note) {
   const opId = await queueDelete(note);
-  toast(t("noteDeleted"), {
+  toast("deleted", t("noteDeleted"), {
     label: t("undo"),
     run: async () => {
       const movedTo = await undoDelete(opId);
@@ -512,7 +534,7 @@ async function restore(note: Note) {
   render();
   try {
     await restoreNote(note.id);
-    toast(t("noteRestored"));
+    toast("success", t("noteRestored"));
   } catch (err) {
     await ask(t("notRestored"), (err as Error).message, OK);
   }
@@ -667,7 +689,7 @@ function setUpInstall() {
   });
   window.addEventListener("appinstalled", () => {
     item.hidden = true;
-    toast(t("installed"));
+    toast("success", t("installed"));
   });
   item.onclick = async () => {
     menuEl.hidden = true;
@@ -797,6 +819,65 @@ function initialOf(name: string): string {
   return (graphemes.find((g) => !/^[เแโใไ]$/.test(g)) ?? "?").toUpperCase();
 }
 
+/** Waits for `work`, or gives up after `ms`: resolves true if it finished in time. */
+const within = (work: Promise<unknown>, ms: number) =>
+  Promise.race([work.then(() => true), new Promise<boolean>((resolve) => setTimeout(() => resolve(false), ms))]);
+
+/**
+ * Does what an Action Link asked. It only opens things: a pre-filled note is
+ * saved once the user types or closes it, never by the link itself.
+ */
+async function runAction(action: Action, refreshing: Promise<void>) {
+  if (action.kind === "new") {
+    const prefilled = action.text || action.tag || action.color;
+    if (!prefilled) return openEditor(null, editorActions(null));
+    return openEditor(null, editorActions(null), {
+      html: noteHtmlFor(action.text, action.tag),
+      images: NO_IMAGE_CHANGES,
+      color: action.color,
+      fromLink: true,
+    });
+  }
+  if (action.kind === "search") {
+    if (action.q) searchEl.value = action.q;
+    searchEl.focus();
+    render();
+    return;
+  }
+  if (action.kind === "latest") {
+    // The newest version may be on another device: refresh first, but don't
+    // keep the user waiting more than a few seconds.
+    showProgress({ label: t("refresh"), done: 0, total: 0 });
+    const fresh = await within(refreshing, 8000);
+    const latest = localNotes()[0];
+    if (!latest) return toast("attention", t("noNotesYet"));
+    if (!fresh || status().offline) toast("offline", t("latestMaybeOld"));
+    return editNote(latest);
+  }
+  // A share: shown in the editor like a pre-filled new note.
+  const shared = await readShare(action.id).catch(() => null);
+  if (!shared) return toast("attention", t("shareGone"));
+  const added = [];
+  let unsupported = 0;
+  for (const file of shared.files) {
+    if (!file.type.startsWith("image/")) {
+      unsupported++;
+      continue;
+    }
+    try {
+      added.push(await prepareImage(new File([file.blob], file.name, { type: file.type })));
+    } catch {
+      unsupported++;
+    }
+  }
+  if (unsupported) toast("attention", t("shareUnsupported", { n: unsupported }));
+  const hasText = Boolean(shared.title || shared.text || shared.url);
+  if (hasText || added.length) {
+    openEditor(null, editorActions(null), { html: sharedNoteHtml(shared), images: { removed: [], added }, fromLink: true });
+  }
+  await deleteShare(action.id).catch(() => {});
+}
+
 /** The page before sign-in: what the app does and what Microsoft will ask to allow. */
 function showLanding() {
   $("landing").hidden = false;
@@ -822,6 +903,10 @@ async function start() {
   translatePage();
   document.addEventListener("touchstart", () => {}, { passive: true });
 
+  // An Action Link runs once: tidy the address so a reload doesn't repeat it.
+  const linked = parseActionLink(new URL(location.href));
+  if (linked) history.replaceState(null, "", "/");
+
   const account = await initAuth();
   if (account) {
     // Notes on this device belong to whoever synced them. If a different
@@ -833,9 +918,17 @@ async function start() {
     await setItem("owner", account.homeAccountId);
   }
   if (!account) {
+    // Keep the action through sign-in (this tab only, used once, 10 minutes).
+    if (linked) {
+      savePending(linked);
+      toast("attention", t("signInToContinue"));
+    }
     showLanding();
     return;
   }
+  // A Pending Action runs for whoever signed in: a different account's data was
+  // wiped above, and a pre-filled note saves to the account now signed in.
+  const action = linked ?? takePending();
   setUpMenu(account.username, initialOf(account.name || account.username));
   setUpSearch();
   setUpPullToRefresh();
@@ -857,7 +950,10 @@ async function start() {
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "visible" && Date.now() - lastRefresh > 10_000) refresh();
   });
-  await refresh();
+  // Notes load in the background while an action opens what it asked for.
+  const refreshing = refresh();
+  if (action) await runAction(action, refreshing);
+  await refreshing;
 }
 
 start().catch((err) => {

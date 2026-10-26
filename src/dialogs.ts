@@ -1,6 +1,6 @@
 // The main window's editor dialog, conflict compare screen and settings.
 import { wordDiff } from "./diff";
-import { createEditor, type Editor } from "./editor";
+import { createEditor, type Draft, type Editor } from "./editor";
 import type { ImageChanges } from "./graph";
 import { noteText, type Note } from "./note";
 import { getSettings, saveSettings, type Settings } from "./settings";
@@ -32,7 +32,7 @@ let actions: EditorActions | null = null;
 let editor: Editor | null = null;
 
 /** Opens the editor on a note (or a blank new note). `draft` restores unsaved work. */
-export function openEditor(note: Note | null, next: EditorActions, draft?: { html: string; images: ImageChanges }) {
+export function openEditor(note: Note | null, next: EditorActions, draft?: Draft) {
   actions = next;
   editor = createEditor({
     note,
@@ -46,6 +46,11 @@ export function openEditor(note: Note | null, next: EditorActions, draft?: { htm
   popOutBtn.hidden = !next.popOut;
   editorDialog.showModal();
   if (!note || matchMedia("(pointer: fine)").matches) editor.focus();
+}
+
+/** Saves the open note now, if there is one (before leaving to sign in). */
+export async function flushOpenEditor() {
+  await editor?.flush();
 }
 
 /** Saves whatever is left, then closes. There's no Save button: notes save themselves. */

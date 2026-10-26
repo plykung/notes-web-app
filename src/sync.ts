@@ -1,7 +1,7 @@
 // Offline-first: the last notes from Microsoft plus a queue of local changes
 // (the outbox), both kept on the device. The screen always shows the notes with
 // queued changes applied; the queue syncs in order whenever Microsoft is reachable.
-import { OfflineError } from "./auth";
+import { OfflineError, SignInNeededError } from "./auth";
 import {
   ConflictError,
   GraphError,
@@ -53,6 +53,8 @@ let syncingOpId: string | null = null;
 let running = false;
 let offline = !navigator.onLine;
 let loadError: string | null = null;
+/** The login expired: changes wait on the device until the user signs in again. */
+let needsSignIn = false;
 let ui: SyncUi;
 /** Where each synced delete moved its note, so it can still be undone. */
 const deletedTo = new Map<string, string>();
@@ -132,7 +134,7 @@ export function noteState(id: string): "syncing" | "queued" | null {
   return cached!.states.get(id) ?? null;
 }
 
-export const status = () => ({ offline, waiting: outbox.length, syncing: syncingOpId !== null, loadError });
+export const status = () => ({ offline, needsSignIn, waiting: outbox.length, syncing: syncingOpId !== null, loadError });
 
 // ---------- Queueing changes ----------
 
@@ -366,6 +368,7 @@ async function refreshFromServer(full: boolean) {
     await setItem("deltaLink", nextLink);
   }
   offline = false;
+  needsSignIn = false;
   loadError = null;
   changedLocally();
   await setItem("snapshot", snapshot);
@@ -395,9 +398,11 @@ export async function sync(opts: { full?: boolean } = {}) {
         const result = await runOp(op);
         if (result) retarget(opNoteId(op), result);
         offline = false;
+        needsSignIn = false;
       } catch (err) {
-        if (err instanceof OfflineError) {
-          offline = true;
+        if (err instanceof OfflineError || err instanceof SignInNeededError) {
+          if (err instanceof SignInNeededError) needsSignIn = true;
+          else offline = true;
           return;
         }
         failure = err;
@@ -417,6 +422,7 @@ export async function sync(opts: { full?: boolean } = {}) {
     await refreshFromServer(opts.full ?? false);
   } catch (err) {
     if (err instanceof OfflineError) offline = true;
+    else if (err instanceof SignInNeededError) needsSignIn = true;
     else loadError = (err as Error).message;
   } finally {
     syncingOpId = null;

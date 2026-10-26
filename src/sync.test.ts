@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { Note } from "./note";
 
 class OfflineError extends Error {}
+class SignInNeededError extends Error {}
 const graph = {
   createNote: vi.fn(),
   createNoteOnce: vi.fn(),
@@ -14,7 +15,7 @@ const graph = {
   changesSince: vi.fn(),
 };
 
-vi.mock("./auth", () => ({ OfflineError }));
+vi.mock("./auth", () => ({ OfflineError, SignInNeededError }));
 vi.mock("./graph", () => ({
   ...graph,
   NO_IMAGE_CHANGES: { removed: [], added: [] },
@@ -137,6 +138,16 @@ describe("syncing", () => {
     await vi.waitFor(() => expect(sync.status().syncing).toBe(false));
     expect(sync.status()).toMatchObject({ offline: true, waiting: 1 });
     expect(ui.failed).not.toHaveBeenCalled();
+  });
+
+  it("keeps changes queued and asks for sign-in when the login has expired", async () => {
+    await start([note("a", "x")]);
+    offline();
+    graph.replaceNote.mockRejectedValue(new SignInNeededError());
+    await sync.queueEdit(note("a", "x"), { html: html("y") });
+    await vi.waitFor(() => expect(sync.status().syncing).toBe(false));
+    expect(sync.status()).toMatchObject({ needsSignIn: true, waiting: 1 });
+    expect(ui.failed).not.toHaveBeenCalled(); // nothing is lost or reported as refused
   });
 
   it("sends queued changes in order once online, then reloads", async () => {

@@ -23,4 +23,21 @@
   };
   for (const btn of document.querySelectorAll("[data-lang]")) btn.addEventListener("click", () => show(btn.dataset.lang));
   show(wanted);
+
+  // Shortcuts page: links use this site's own address, with a copy button each.
+  for (const code of document.querySelectorAll("code[data-link]")) code.textContent = location.origin + code.dataset.link;
+  for (const btn of document.querySelectorAll("button[data-copy]")) {
+    btn.addEventListener("click", async () => {
+      const code = btn.previousElementSibling;
+      const label = btn.textContent;
+      try {
+        await navigator.clipboard.writeText(code.textContent);
+        btn.textContent = "✓";
+      } catch {
+        // No clipboard access: select the link so it can be copied by hand.
+        getSelection().selectAllChildren(code);
+      }
+      setTimeout(() => (btn.textContent = label), 1500);
+    });
+  }
 })();

@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'" />
+    <title>ทางลัดและ Siri</title>
+    <link rel="icon" href="/icon-192.png" />
+    <link rel="stylesheet" href="/legal.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header>
+        <a class="back" href="/">← Notes</a>
+        <span class="spacer"></span>
+        <div class="lang" role="group" aria-label="ภาษา / Language">
+          <button data-lang="th">ไทย</button>
+          <button data-lang="en">English</button>
+        </div>
+      </header>
+
+      <article data-lang-block="th">
+        <h1>ทางลัดและ Siri</h1>
+        <p class="meta">เปิดโน้ตได้เร็วขึ้นจากหน้าจอโฮม ปุ่ม Action หรือ Siri</p>
+
+        <p>ลิงก์ด้านล่างเปิดแอปโน้ตและทำงานหนึ่งอย่าง ลิงก์จะไม่บันทึกหรือลบสิ่งใดเอง โน้ตที่เปิดจากลิงก์จะบันทึกเมื่อคุณพิมพ์หรือปิดโน้ตเท่านั้น</p>
+        <p class="note"><strong>Android:</strong> กดค้างที่ไอคอนแอปโน้ตเพื่อดูทางลัด <em>New note</em>, <em>Latest note</em> และ <em>Search</em> และใช้ “แชร์” จากแอปอื่นเพื่อส่งข้อความ ลิงก์ หรือรูปภาพมาเป็นโน้ตใหม่ หน้านี้มีไว้สำหรับ iPhone และ iPad ซึ่งใช้แอปคำสั่งลัด (Shortcuts) แทน</p>
+
+        <h2>ลิงก์ที่ใช้ได้</h2>
+        <ul class="links">
+          <li><strong>โน้ตใหม่</strong><code data-link="/?action=new"></code><button data-copy>คัดลอก</button></li>
+          <li><strong>โน้ตใหม่พร้อมแท็กและสี</strong><code data-link="/?action=new&amp;tag=shopping&amp;color=green"></code><button data-copy>คัดลอก</button></li>
+          <li><strong>โน้ตล่าสุด</strong> (รีเฟรชก่อน)<code data-link="/?action=latest"></code><button data-copy>คัดลอก</button></li>
+          <li><strong>ค้นหา</strong><code data-link="/?action=search"></code><button data-copy>คัดลอก</button></li>
+        </ul>
+        <p class="meta">สีที่ใช้ได้: yellow, green, pink, purple, blue, gray, charcoal</p>
+
+        <h2>1. “โน้ตใหม่” ด้วยการพูดกับ Siri</h2>
+        <ol>
+          <li>เปิดแอป <strong>คำสั่งลัด (Shortcuts)</strong> แล้วแตะ <strong>+</strong></li>
+          <li>เพิ่มคำสั่ง <strong>Dictate Text</strong> (ป้อนข้อความตามคำบอก)</li>
+          <li>เพิ่มคำสั่ง <strong>URL Encode</strong> (เข้ารหัส URL) โดยใช้ผลจากขั้นที่แล้ว</li>
+          <li>เพิ่มคำสั่ง <strong>Text</strong> (ข้อความ) แล้วพิมพ์ลิงก์ด้านล่าง ตามด้วยผลของ URL Encode<br /><code data-link="/?action=new&amp;text="></code><button data-copy>คัดลอก</button></li>
+          <li>เพิ่มคำสั่ง <strong>Open URLs</strong> (เปิด URL)</li>
+          <li>ตั้งชื่อคำสั่งลัดว่า <strong>New note</strong> แล้วพูดว่า “หวัดดี Siri, New note”</li>
+        </ol>
+        <p class="meta">ชื่อคำสั่งในเครื่องของคุณอาจแสดงเป็นภาษาไทย ให้ค้นหาด้วยชื่อในวงเล็บ</p>
+
+        <h2>2. “โน้ตล่าสุด” และ “ค้นหา”</h2>
+        <ul>
+          <li><strong>โน้ตล่าสุด:</strong> สร้างคำสั่งลัดที่มีเพียง <strong>Open URLs</strong> พร้อมลิงก์โน้ตล่าสุด</li>
+          <li><strong>ค้นหาคำ:</strong> ใช้ <strong>Ask for Input</strong> (ขออินพุต) → <strong>URL Encode</strong> → ข้อความ <code data-link="/?action=search&amp;q="></code> ตามด้วยผล → <strong>Open URLs</strong></li>
+        </ul>
+
+        <h2>3. ใส่ไว้ที่ไหนดี</h2>
+        <ul>
+          <li><strong>หน้าจอโฮม:</strong> ในแอปคำสั่งลัด แตะ ⓘ ของคำสั่งลัด แล้วเลือก <strong>เพิ่มไปยังหน้าจอโฮม</strong></li>
+          <li><strong>ปุ่ม Action</strong> (iPhone 15 Pro ขึ้นไป): การตั้งค่า → ปุ่ม Action → คำสั่งลัด → เลือกคำสั่งลัดของคุณ</li>
+          <li><strong>แตะด้านหลัง:</strong> การตั้งค่า → การช่วยการเข้าถึง → การสัมผัส → แตะด้านหลัง</li>
+        </ul>
+        <p class="meta">ลิงก์อาจเปิดใน Safari แทนแอปที่ติดตั้งไว้ ขึ้นอยู่กับเวอร์ชัน iOS ทั้งสองแบบใช้โน้ตชุดเดียวกัน แต่ต้องลงชื่อเข้าใช้ในแต่ละที่</p>
+      </article>
+
+      <article data-lang-block="en" hidden>
+        <h1>Shortcuts &amp; Siri</h1>
+        <p class="meta">Open Notes faster from your home screen, the Action Button or Siri.</p>
+
+        <p>The links below open Notes and do one thing. A link never saves or deletes anything by itself: a note it opens is saved only once you type in it or close it.</p>
+        <p class="note"><strong>Android:</strong> long-press the Notes icon for the <em>New note</em>, <em>Latest note</em> and <em>Search</em> shortcuts, and use <em>Share</em> in any app to send text, a link or photos to a new note. This page is for iPhone and iPad, which use the Shortcuts app instead.</p>
+
+        <h2>The links</h2>
+        <ul class="links">
+          <li><strong>New note</strong><code data-link="/?action=new"></code><button data-copy>Copy</button></li>
+          <li><strong>New note with a Tag and colour</strong><code data-link="/?action=new&amp;tag=shopping&amp;color=green"></code><button data-copy>Copy</button></li>
+          <li><strong>Latest note</strong> (refreshes first)<code data-link="/?action=latest"></code><button data-copy>Copy</button></li>
+          <li><strong>Search</strong><code data-link="/?action=search"></code><button data-copy>Copy</button></li>
+        </ul>
+        <p class="meta">Colours: yellow, green, pink, purple, blue, gray, charcoal.</p>
+
+        <h2>1. “New note” by talking to Siri</h2>
+        <ol>
+          <li>Open the <strong>Shortcuts</strong> app and tap <strong>+</strong>.</li>
+          <li>Add <strong>Dictate Text</strong>.</li>
+          <li>Add <strong>URL Encode</strong>, using the dictated text.</li>
+          <li>Add <strong>Text</strong>: type the link below, then insert the URL Encode result after it.<br /><code data-link="/?action=new&amp;text="></code><button data-copy>Copy</button></li>
+          <li>Add <strong>Open URLs</strong>.</li>
+          <li>Name the shortcut <strong>New note</strong>, then say “Hey Siri, New note”.</li>
+        </ol>
+
+        <h2>2. “Latest note” and “Search”</h2>
+        <ul>
+          <li><strong>Latest note:</strong> a shortcut with just <strong>Open URLs</strong> and the latest-note link.</li>
+          <li><strong>Search for words:</strong> <strong>Ask for Input</strong> → <strong>URL Encode</strong> → Text <code data-link="/?action=search&amp;q="></code> followed by the result → <strong>Open URLs</strong>.</li>
+        </ul>
+
+        <h2>3. Where to put them</h2>
+        <ul>
+          <li><strong>Home screen:</strong> in Shortcuts, tap the shortcut's ⓘ, then <strong>Add to Home Screen</strong>.</li>
+          <li><strong>Action Button</strong> (iPhone 15 Pro and later): Settings → Action Button → Shortcut → pick yours.</li>
+          <li><strong>Back Tap:</strong> Settings → Accessibility → Touch → Back Tap.</li>
+        </ul>
+        <p class="meta">Depending on the iOS version, a link may open in Safari rather than the installed app. Both show the same notes, but each needs you to sign in.</p>
+      </article>
+
+      <footer><a href="/terms.html">ข้อกำหนดการใช้งาน · Terms</a> · <a href="/privacy.html">นโยบายความเป็นส่วนตัว · Privacy</a></footer>
+    </div>
+    <script src="/legal.js"></script>
+  </body>
+</html>

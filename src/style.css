@@ -862,3 +862,15 @@ dialog.images[open] { animation: fade-in 180ms ease-out; }
   .section-toggle .chevron { transition: none; }
   .ptr { rotate: none; }
 }
+
+/* ---------- Toast icons: one per kind of message (ui.ts toast) ---------- */
+.toast-icon { flex: none; display: grid; place-items: center; width: 20px; height: 20px; }
+.toast-icon svg { width: 18px; height: 18px; }
+.toast-icon.success, .toast-icon.saved { color: #6fd28a; }
+.toast-icon.updated { color: #9fc0ff; }
+.toast-icon.offline { color: #f0b54a; }
+.toast-icon.deleted { color: #e0e0e0; }
+.toast-icon.pinned { color: #9fc0ff; }
+.toast-icon.pinned svg { fill: currentColor; }
+.toast-icon.attention { color: #ff8a80; }
+.toast-text { min-width: 0; overflow-wrap: anywhere; }

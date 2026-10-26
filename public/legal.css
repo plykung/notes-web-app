@@ -66,6 +66,13 @@ ul { padding-left: 22px; }
 li { margin: 4px 0; }
 a { color: var(--accent); overflow-wrap: anywhere; }
 .email { white-space: nowrap; }
+code { font: 13px ui-monospace, Consolas, monospace; padding: 2px 6px; border-radius: 6px; background: var(--bg); overflow-wrap: anywhere; }
+.links { list-style: none; padding: 0; }
+.links li { display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; align-items: center; padding: 8px 0; border-top: 1px solid var(--line); }
+.links li:first-child { border-top: 0; }
+.links li strong { grid-column: 1 / -1; }
+button[data-copy] { font: inherit; font-size: 13px; padding: 3px 10px; border: 1px solid var(--line); border-radius: 999px; background: none; color: var(--accent); cursor: pointer; }
+ol li { margin: 6px 0; }
 footer { margin-top: 20px; color: var(--muted); font-size: 14px; text-align: center; }
 [hidden] { display: none !important; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }

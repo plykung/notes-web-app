@@ -68,11 +68,24 @@ let toastTimer = 0;
 let toastLeft = 0;
 let toastSince = 0;
 
+/** What a toast is about; each kind has its own icon and colour. */
+export type ToastKind = "success" | "updated" | "offline" | "deleted" | "pinned" | "attention" | "saved";
+const TOAST_ICONS: Record<ToastKind, keyof typeof ICONS> = {
+  success: "cloudCheck",
+  updated: "sync",
+  offline: "cloudOff",
+  deleted: "trash",
+  pinned: "pin",
+  attention: "alert",
+  saved: "check",
+};
+
 /**
- * A short message at the bottom of the screen, optionally with one action such
- * as Undo. It waits while the pointer or keyboard focus is on it.
+ * A short message at the bottom of the screen with an icon for its kind, and
+ * optionally one action such as Undo. It waits while the pointer or keyboard
+ * focus is on it.
  */
-export function toast(message: string, action?: { label: string; run: () => void }, doc = document) {
+export function toast(kind: ToastKind, message: string, action?: { label: string; run: () => void }, doc = document) {
   let el = doc.getElementById("toast");
   if (!el) {
     el = doc.createElement("div");
@@ -105,7 +118,14 @@ export function toast(message: string, action?: { label: string; run: () => void
 
   // Filled on the next frame so screen readers notice the live region change.
   requestAnimationFrame(() => {
-    box.replaceChildren(message);
+    const icon = doc.createElement("span");
+    icon.className = `toast-icon ${kind}`;
+    icon.setAttribute("aria-hidden", "true");
+    icon.innerHTML = ICONS[TOAST_ICONS[kind]];
+    const text = doc.createElement("span");
+    text.className = "toast-text";
+    text.textContent = message;
+    box.replaceChildren(icon, text);
     if (action) {
       const btn = doc.createElement("button");
       btn.className = "toast-action";

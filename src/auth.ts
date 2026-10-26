@@ -47,16 +47,28 @@ export function signOut() {
 }
 
 /**
- * An access token for Graph. Redirects to Microsoft only when the user really
- * has to sign in again, never while offline.
+ * The login has expired and only the user can renew it. The app keeps working
+ * from the device copy and asks; it never jumps to Microsoft on its own, which
+ * could cut off a note being typed.
  */
+export class SignInNeededError extends Error {
+  constructor() {
+    super("Please sign in again.");
+  }
+}
+
+/** An access token for Graph, without ever leaving the page. */
 export async function getToken(): Promise<string> {
-  if (!account) throw new Error("Not signed in");
+  if (!account) throw new SignInNeededError();
   try {
     return (await msal.acquireTokenSilent({ scopes: SCOPES, account })).accessToken;
   } catch (err) {
     if (!navigator.onLine || !(err instanceof InteractionRequiredAuthError)) throw new OfflineError();
-    await msal.acquireTokenRedirect({ scopes: SCOPES, account });
-    throw new Error("Signing in again…");
+    throw new SignInNeededError();
   }
+}
+
+/** The user chose to sign in again: renew the existing account's login. */
+export function signInAgain() {
+  return account ? msal.acquireTokenRedirect({ scopes: SCOPES, account }) : signIn();
 }

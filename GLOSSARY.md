@@ -36,6 +36,18 @@ _Avoid_: Viewer, client, my app
 A create, edit or delete the user made on a Device that hasn't reached the Hub yet. It's shown as "Not synced yet".
 _Avoid_: Pending op, outbox item, draft
 
+**Action Link**:
+A web address that opens the Notes Web App and asks it to do one thing, such as start a new note or search. It never saves, deletes or changes a note by itself.
+_Avoid_: Deep link, URL scheme, command
+
+**Pending Action**:
+An Action Link the user tapped while signed out, held in that browser tab until they sign in and then carried out once. It's discarded if sign-in doesn't happen within a few minutes.
+_Avoid_: Saved link, queued action (a Queued Change is something else)
+
+**Latest Note**:
+The note edited most recently anywhere (on any Device or in the PC app), as known after a refresh.
+_Avoid_: Recent note, last note, newest note
+
 **Device**:
 A screen the user reads notes on: the Windows PC, a phone or an iPad.
 _Avoid_: Platform, client

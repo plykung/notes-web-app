@@ -76,7 +76,7 @@ export function popOut(note: Note | null, actions: PopOutActions) {
 
   const opened = window.open("", `note-${key}`, "popup,width=380,height=520");
   if (!opened) {
-    toast(t("popupBlocked"));
+    toast("attention", t("popupBlocked"));
     return;
   }
   const win: Window = opened;
@@ -164,7 +164,7 @@ function showImagesWindow(images: EditorImage[], start: number, edit: ImageEdit,
   const id = editor.id();
   const win = window.open("", `images-${id ?? "new"}`, "popup,width=960,height=720");
   if (!win) {
-    toast(t("popupBlocked"));
+    toast("attention", t("popupBlocked"));
     return;
   }
   const title = editor.el.ownerDocument.title || t("appName");

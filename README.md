@@ -7,6 +7,7 @@
 - Search and Tags (`#word`), colours, pinning, images
 - Works offline; changes sync when you're back online, with a compare screen for conflicts
 - Pop-out note windows on the PC; installable on iPad, Android and Windows
+- Shortcuts: long-press the Android icon (New note, Latest note, Search), share text and photos into Notes, or use Siri and the Action Button on iPhone ([public/shortcuts.html](public/shortcuts.html))
 - English and ไทย, light and dark
 
 ## How it works
