@@ -12,7 +12,7 @@
     "deploy": "npm run build && wrangler deploy",
     "deploy:check": "npm run build && wrangler deploy --dry-run"
   },
-  "license": "UNLICENSED",
+  "license": "MIT",
   "private": true,
   "type": "module",
   "dependencies": {

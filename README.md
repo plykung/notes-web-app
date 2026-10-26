@@ -2,6 +2,8 @@
 
 Your Microsoft Sticky Notes on every device: PC, iPad and phone. An offline-first PWA that reads and edits Sticky Notes through Microsoft Graph, straight from the browser, with no server in between.
 
+**Live:** https://notes-web-app.naphats.workers.dev
+
 - Search and Tags (`#word`), colours, pinning, images
 - Works offline; changes sync when you're back online, with a compare screen for conflicts
 - Pop-out note windows on the PC; installable on iPad, Android and Windows
@@ -48,4 +50,4 @@ Notes travel only between the user's device and Microsoft. See [public/privacy.h
 
 ## License
 
-Private. All rights reserved.
+[MIT](LICENSE). Not affiliated with Microsoft; Microsoft, Sticky Notes, Outlook and OneNote are trademarks of Microsoft Corporation.

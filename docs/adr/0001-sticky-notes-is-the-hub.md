@@ -6,7 +6,7 @@ Every note lives in Microsoft Sticky Notes. The user copies their Google Keep no
 
 The Notes Web App reaches Sticky Notes through the Microsoft Graph **mail** API, on the mailbox's well-known `notes` folder (`/me/mailFolders/notes/messages`). It needs the delegated `Mail.ReadWrite` permission.
 
-The dedicated notes API (`/me/notes`, `ShortNotes.ReadWrite`) was tried first. On 2026-10-26 it returned 403 `ErrorAccessDenied` for the user's personal, Gmail-based Microsoft account, even though the permission was granted. The mail API returned all 258 notes, each with message class `IPM.StickyNote` and its text as simple HTML in the body.
+The dedicated notes API (`/me/notes`, `ShortNotes.ReadWrite`) was tried first. On 2026-10-26 it returned 403 `ErrorAccessDenied` for a personal Microsoft account, even though the permission was granted. The mail API returned every note, each with message class `IPM.StickyNote` and its text as simple HTML in the body.
 
 This is the official public Graph API, but Microsoft doesn't document it for Sticky Notes, so it may change without notice. `Mail.ReadWrite` grants access to the whole mailbox. To limit that:
 - The code only ever touches the `notes` folder.
